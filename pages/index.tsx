@@ -33,13 +33,4 @@ const TopPage: FC = () => {
   );
 };
 
-// export const getStaticProps = async () => {
-//   const products = await getProducts();
-//   return {
-//     props: {
-//       products: products,
-//     },
-//   };
-// };
-
 export default TopPage;
