@@ -2,22 +2,21 @@ import { FC, useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./index.module.css";
 import { listProducts, Product } from "../lib/product";
-import { useCartItemCount } from "../lib/cart";
 import { Layout } from "../components/Layout";
 
 const TopPage: FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const { cartItemCount } = useCartItemCount();
 
   useEffect(() => {
     listProducts().then((products) => setProducts(products));
   }, []);
 
   return (
-    <Layout cartItemCount={cartItemCount}>
+    <Layout>
       <ul className={styles.list}>
         {products.map((product) => (
           <li key={product.id} className={styles.listItem}>
+            {/* このリンク先はないので新規ページを作る */}
             <Link href={`/products/${product.id}`}>
               <a className={styles.link}>
                 <div className={styles.imageWrapper}>
@@ -33,5 +32,14 @@ const TopPage: FC = () => {
     </Layout>
   );
 };
+
+// export const getStaticProps = async () => {
+//   const products = await getProducts();
+//   return {
+//     props: {
+//       products: products,
+//     },
+//   };
+// };
 
 export default TopPage;

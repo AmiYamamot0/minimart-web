@@ -1,39 +1,30 @@
+import { useRouter } from "next/dist/client/router";
 import { FC, useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { getProduct, Product } from "../../lib/product";
-import { addToCart, useCartItemCount } from "../../lib/cart";
+// import { graphqlRequest } from "../../lib/graphqlClient";
+import { getProduct } from "../../lib/product";
 import { Layout } from "../../components/Layout";
-import styles from "./[id].module.css";
+// import styles from "../index.module.css";
+
+import type { Product } from "../../lib/product";
 
 const ProductPage: FC = () => {
   const router = useRouter();
-  const id = router.query.id ? String(router.query.id) : null;
+  const id = router.query.id as string;
   const [product, setProduct] = useState<Product | null>(null);
-  const { cartItemCount, updateCartItemCount } = useCartItemCount();
-
-  const handleAddToCart = (product: Product): void => {
-    addToCart(product);
-    updateCartItemCount();
-  };
 
   useEffect(() => {
-    if (id === null) return;
-    getProduct(id).then((product) => setProduct(product));
+    if (!id) {
+      return;
+    }
+    (async () => {
+      const prod = await getProduct(id);
+      setProduct(prod);
+    })();
   }, [id]);
 
-  if (product === null) return null;
-
   return (
-    <Layout cartItemCount={cartItemCount}>
-      <img src={product.imageUrl} alt={`${product.name}の写真`} className={styles.image} />
-      <div className={styles.product}>
-        <h2>{product.name}</h2>
-        <p>{product.price}円</p>
-        <p>{product.description}</p>
-        <button className={styles.addCartBtn} onClick={() => handleAddToCart(product)}>
-          カートに追加する
-        </button>
-      </div>
+    <Layout>
+      <h1>{product?.name}</h1>
     </Layout>
   );
 };
