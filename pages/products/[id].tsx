@@ -8,6 +8,7 @@ import { Layout } from "../../components/Layout";
 import type { Product } from "../../lib/product";
 
 const ProductPage: FC = () => {
+  
   const router = useRouter();
   const id = router.query.id as string;
   const [product, setProduct] = useState<Product | null>(null);
